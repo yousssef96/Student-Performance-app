@@ -8,6 +8,7 @@ authors = [
     {name = "Youssef Abdelmoneim"}
 ]
 dependencies = [
+    "loguru>=0.7.3",
     "numpy>=2.4.3",
     "pandas>=3.0.1",
     "seaborn>=0.13.2",
