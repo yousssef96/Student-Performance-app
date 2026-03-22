@@ -1,16 +1,19 @@
-import os
 from src.logger import logger
 import pandas as pd
+from pathlib import Path
 
 from sklearn.model_selection import train_test_split
 from dataclasses import dataclass
 
+from src.components.data_transformation import DataTransformation
+from src.components.data_transformation import DataTransformationConfig
+
 
 @dataclass
 class DataIngestionConfig:
-    train_data_path: str=os.path.join('artifacts', "train.csv")
-    test_data_path: str=os.path.join('artifacts', "test.csv")
-    raw_data_path: str=os.path.join('artifacts', "raw.csv")
+    train_data_path: Path = Path("artifacts") / "train.csv"
+    test_data_path: Path = Path("artifacts") / "test.csv"
+    raw_data_path: Path = Path("artifacts") / "raw.csv"
 
 class DataIngestion:
     def __init__(self):
@@ -22,7 +25,7 @@ class DataIngestion:
             df = pd.read_csv('notebook/data/stud.csv')
             logger.info("Read the dataset as dataframe")
 
-            os.makedirs(os.path.dirname(self.ingestion_config.train_data_path), exist_ok=True)
+            self.ingestion_config.train_data_path.parent.mkdir(parents=True, exist_ok=True)
 
             df.to_csv(self.ingestion_config.raw_data_path, index=False, header=True)
 
@@ -44,7 +47,10 @@ class DataIngestion:
 
 if __name__=="__main__":
     obj=DataIngestion()
-    obj.initiate_data_ingestion()
+    train_data, test_data = obj.initiate_data_ingestion()
+
+    data_transformation = DataTransformation()
+    data_transformation.initiate_data_transformation(train_data, test_data)
 
 
 
