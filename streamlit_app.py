@@ -3,7 +3,7 @@ import requests
 import pandas as pd
 
 
-API_URL = st.secrets.get("api_settings", {}).get("url", "http://localhost:8000/predict")
+API_URL = st.secrets["url"]
 
 st.set_page_config(page_title="Student Performance Predictor", layout="centered")
 
