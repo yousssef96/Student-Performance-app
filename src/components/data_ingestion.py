@@ -11,7 +11,7 @@ from src.components.data_transformation import DataTransformationConfig
 from src.components.model_trainer import ModelTrainerConfig
 from src.components.model_trainer import ModelTrainer
 
-
+from src.components.data_validation import DataValidation
 
 @dataclass
 class DataIngestionConfig:
@@ -28,6 +28,12 @@ class DataIngestion:
         try:
             df = pd.read_csv('notebook/data/stud.csv')
             logger.info("Read the dataset as dataframe")
+
+            validator = DataValidation(df)
+            is_valid = validator.run_validation()
+
+            if not is_valid:
+                raise ValueError("Data validation failed — check logs for details")
 
             self.ingestion_config.train_data_path.parent.mkdir(parents=True, exist_ok=True)
 
